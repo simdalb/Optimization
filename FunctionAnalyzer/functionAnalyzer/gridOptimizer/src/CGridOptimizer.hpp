@@ -43,25 +43,33 @@ public:
 
    virtual void calculateExtrema()
    {
+      if(mXResolutionList.empty() || mXResolutionList.size() != mYResolutionList.size())
+      {
+         return;
+      }
+      if(mpGridPoint)
+      {
+         delete mpGridPoint;
+      }
       CGridConfig gridConfig;
       gridConfig.mX0 = mFunctor.getMinX();
       gridConfig.mY0 = mFunctor.getMinY();
       gridConfig.mXRange = mFunctor.getMaxX() - mFunctor.getMinX();
       gridConfig.mYRange = mFunctor.getMaxY() - mFunctor.getMinY();
-      gridConfig.mnxCells = raise(2, mXResolutionList[0]);
-      gridConfig.mnyCells = raise(2, mYResolutionList[0]);
       std::vector<int>::const_iterator itXResolutionList = mXResolutionList.begin();
       std::vector<int>::const_iterator itYResolutionList = mYResolutionList.begin();
-      if(mpGridPoint)
+      gridConfig.mnxCells = raise(2, *(itXResolutionList++));
+      gridConfig.mnyCells = raise(2, *(itYResolutionList++));
+      while(itXResolutionList != mXResolutionList.end())
       {
-         delete mpGridPoint;
-      }
-      for(; itXResolutionList != mXResolutionList.end(); itXResolutionList++)
-      {
-         if(itXResolutionList != mXResolutionList.begin())
+         if(mpGridPoint)
          {
             gridConfig.mXRange = 2. * gridConfig.mXRange / double(gridConfig.mnxCells);
+            gridConfig.mYRange = 2. * gridConfig.mYRange / double(gridConfig.mnyCells);
+            gridConfig.mnxCells = raise(2, *(itXResolutionList++));
+            gridConfig.mnyCells = raise(2, *(itYResolutionList++));
             gridConfig.mX0 = mpFuncMinGridPoint->getX() - 0.5 * gridConfig.mXRange;
+            gridConfig.mY0 = mpFuncMinGridPoint->getY() - 0.5 * gridConfig.mYRange;
             if(gridConfig.mX0 < mFunctor.getMinX())
             {
                gridConfig.mX0 = mFunctor.getMinX();
@@ -78,18 +86,13 @@ public:
             {
                gridConfig.mYRange = mFunctor.getMaxY() - gridConfig.mY0;
             }
-            gridConfig.mYRange = 2. * gridConfig.mYRange / double(gridConfig.mnyCells);
-            gridConfig.mY0 = mpFuncMinGridPoint->getY() - 0.5 * gridConfig.mYRange;
-            gridConfig.mnxCells = raise(2, *itXResolutionList);
-            gridConfig.mnyCells = raise(2, *itYResolutionList);
             delete mpGridPoint;
          }
          mpGridPoint = new CGridPoint<Functor>(gridConfig, mFunctor, mpFuncMinGridPoint, mpFuncMaxGridPoint);
-         itYResolutionList++;
       }
    }
 
-   virtual const IGridPoint* getFuncMinGridPoint() {return mpFuncMaxGridPoint;}
+   virtual const IGridPoint* getFuncMinGridPoint() {return mpFuncMinGridPoint;}
 
    virtual const IGridPoint* getFuncMaxGridPoint() {return mpFuncMaxGridPoint;}
 
@@ -101,7 +104,7 @@ private:
       {
          res *= base;
       }
-      return base;
+      return res;
    }
 
 private:

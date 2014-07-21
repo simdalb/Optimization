@@ -23,8 +23,8 @@ public:
    , mpRightGridPoint(0)
    , mpLowerGridPoint(0)
    {
-      pFuncMaxGridPoint = this;
       pFuncMinGridPoint = this;
+      pFuncMaxGridPoint = this;
 
       mpRightGridPoint = new CGridPoint(gridConfig, functor, pFuncMinGridPoint, pFuncMaxGridPoint, 1, 0, true);
       mpLowerGridPoint = new CGridPoint(gridConfig, functor, pFuncMinGridPoint, pFuncMaxGridPoint, 0, 1, false);
@@ -64,12 +64,12 @@ private:
 
       if(nX < gridConfig.mnxCells && doRight)
       {
-         mpRightGridPoint = new CGridPoint(gridConfig, functor, pFuncMaxGridPoint, pFuncMinGridPoint, nX + 1, nY, true);
+         mpRightGridPoint = new CGridPoint(gridConfig, functor, pFuncMinGridPoint, pFuncMaxGridPoint, nX + 1, nY, true);
       }
 
       if(nY < gridConfig.mnyCells)
       {
-         mpLowerGridPoint = new CGridPoint(gridConfig, functor, pFuncMaxGridPoint, pFuncMinGridPoint, nX, nY + 1, false);
+         mpLowerGridPoint = new CGridPoint(gridConfig, functor, pFuncMinGridPoint, pFuncMaxGridPoint, nX, nY + 1, false);
       }
    }
 
