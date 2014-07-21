@@ -1,19 +1,18 @@
 
 include ../../../makefile.inc
 
-OBJECTS := CMyFunction1.o
-SOURCES := $(OBJECTS:%.o=%.cpp)
+SOURCES := CMyFunction1.cpp
+
+OBJECTS := $(SOURCES:.cpp=.o)
+
+$(OBJECTS): $(SOURCES)
+	$(CC) -c $(CFLAGS) $< -o $@
 
 all: $(OBJECTS)
 
-$(OBJECTS): %.o: %.cpp
-	$(CC) -c $(CFLAGS) $< -o $@
-
 clean:
 	rm -f *.bak
-	@for obj in $(OBJECTS); do \
-		rm -f $$obj; \
-	done
+	rm -f $(OBJECTS)
 
 depend:
 	makedepend $(SOURCES)

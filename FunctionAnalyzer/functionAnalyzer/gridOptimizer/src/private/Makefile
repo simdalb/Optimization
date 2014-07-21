@@ -1,24 +1,18 @@
 
 include ../../../../makefile.inc
 
-OBJECTS := CGridConfig.o CGridOptimizer.o CGridPoint.o
-SOURCES := $(OBJECTS:%.o=%.cpp)
-LIBRARY := libgridOptimizer.a
+SOURCES := CGridConfig.cpp CGridOptimizer.cpp CGridPoint.cpp
 
-all: $(LIBRARY)
+OBJECTS := $(SOURCES:.cpp=.o)
 
-$(OBJECTS): %.o: %.cpp
+$(OBJECTS): $(SOURCES)
 	$(CC) -c $(CFLAGS) $< -o $@
 
-$(LIBRARY): $(OBJECTS)
-	ar rvs $(LIBRARY) $(OBJECTS)
+all: $(OBJECTS)
 
 clean:
-	rm -f $(LIBRARY)
 	rm -f *.bak
-	@for obj in $(OBJECTS); do \
-		rm -f $$obj; \
-	done
+	rm -f $(OBJECTS)
 
 depend:
 	makedepend $(SOURCES)
@@ -27,7 +21,6 @@ depend:
 CGridConfig.o: ../CGridConfig.hpp
 CGridOptimizer.o: ../CGridOptimizer.hpp ../../api/IGridOptimizer.hpp
 CGridOptimizer.o: ../../api/IGridPoint.hpp .././CGridPoint.hpp
-CGridOptimizer.o: .././../src/CGridPoint.hpp .././../src/CGridConfig.hpp
-CGridOptimizer.o: .././CGridConfig.hpp
-CGridPoint.o: ../CGridPoint.hpp .././../src/CGridPoint.hpp
-CGridPoint.o: .././../src/CGridConfig.hpp
+CGridOptimizer.o: ../././CGridConfig.hpp .././../api/IGridPoint.hpp
+CGridPoint.o: ../CGridPoint.hpp ../././CGridConfig.hpp
+CGridPoint.o: .././../api/IGridPoint.hpp

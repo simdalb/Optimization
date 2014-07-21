@@ -2,8 +2,8 @@
 #ifndef FUNCTIONANALYZER_CGRIDPOINT
 #define FUNCTIONANALYZER_CGRIDPOINT
 
-#include "../src/CGridPoint.hpp"
-#include "../src/CGridConfig.hpp"
+#include "./CGridConfig.hpp"
+#include "../api/IGridPoint.hpp"
 
 namespace functionAnalyzer {
 namespace gridOptimizer {
