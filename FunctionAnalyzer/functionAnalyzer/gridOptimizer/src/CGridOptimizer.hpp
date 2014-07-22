@@ -19,8 +19,7 @@ public:
    : mFunctor(functor)
    , mXResolutionList()
    , mYResolutionList()
-   , mpFuncMinGridPoint(0)
-   , mpFuncMaxGridPoint(0)
+   , mpFuncExtremaGridPoint(0)
    , mpGridPoint(0)
    {}
 
@@ -41,7 +40,7 @@ public:
       mYResolutionList.push_back(yResolution);
    }
 
-   virtual void calculateExtrema()
+   virtual void calculateExtrema(const CGridConfig::eExtremaType extremaType)
    {
       if(mXResolutionList.empty() || mXResolutionList.size() != mYResolutionList.size())
       {
@@ -52,6 +51,7 @@ public:
          delete mpGridPoint;
       }
       CGridConfig gridConfig;
+      gridConfig.mExtremaType = extremaType;
       gridConfig.mX0 = mFunctor.getMinX();
       gridConfig.mY0 = mFunctor.getMinY();
       gridConfig.mXRange = mFunctor.getMaxX() - mFunctor.getMinX();
@@ -68,8 +68,8 @@ public:
             gridConfig.mYRange = 2. * gridConfig.mYRange / double(gridConfig.mnyCells);
             gridConfig.mnxCells = raise(2, *(itXResolutionList++));
             gridConfig.mnyCells = raise(2, *(itYResolutionList++));
-            gridConfig.mX0 = mpFuncMinGridPoint->getX() - 0.5 * gridConfig.mXRange;
-            gridConfig.mY0 = mpFuncMinGridPoint->getY() - 0.5 * gridConfig.mYRange;
+            gridConfig.mX0 = mpFuncExtremaGridPoint->getX() - 0.5 * gridConfig.mXRange;
+            gridConfig.mY0 = mpFuncExtremaGridPoint->getY() - 0.5 * gridConfig.mYRange;
             if(gridConfig.mX0 < mFunctor.getMinX())
             {
                gridConfig.mX0 = mFunctor.getMinX();
@@ -88,13 +88,11 @@ public:
             }
             delete mpGridPoint;
          }
-         mpGridPoint = new CGridPoint<Functor>(gridConfig, mFunctor, mpFuncMinGridPoint, mpFuncMaxGridPoint);
+         mpGridPoint = new CGridPoint<Functor>(gridConfig, mFunctor, mpFuncExtremaGridPoint);
       }
    }
 
-   virtual const IGridPoint* getFuncMinGridPoint() {return mpFuncMinGridPoint;}
-
-   virtual const IGridPoint* getFuncMaxGridPoint() {return mpFuncMaxGridPoint;}
+   virtual const IGridPoint* getFuncExtremaGridPoint() {return mpFuncExtremaGridPoint;}
 
 private:
    int raise(const int base, const int exp)
@@ -111,8 +109,7 @@ private:
    const Functor&   mFunctor;
    std::vector<int> mXResolutionList;
    std::vector<int> mYResolutionList;
-   IGridPoint*      mpFuncMinGridPoint;
-   IGridPoint*      mpFuncMaxGridPoint;
+   IGridPoint*      mpFuncExtremaGridPoint;
    IGridPoint*      mpGridPoint;
 };
 

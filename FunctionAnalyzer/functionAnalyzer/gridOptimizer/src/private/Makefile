@@ -20,7 +20,8 @@ depend:
 
 CGridConfig.o: ../CGridConfig.hpp
 CGridOptimizer.o: ../CGridOptimizer.hpp ../../api/IGridOptimizer.hpp
-CGridOptimizer.o: ../../api/IGridPoint.hpp .././CGridPoint.hpp
-CGridOptimizer.o: ../././CGridConfig.hpp .././../api/IGridPoint.hpp
+CGridOptimizer.o: ../../api/IGridPoint.hpp ../../src/CGridConfig.hpp
+CGridOptimizer.o: .././CGridPoint.hpp ../././CGridConfig.hpp
+CGridOptimizer.o: .././../api/IGridPoint.hpp
 CGridPoint.o: ../CGridPoint.hpp ../././CGridConfig.hpp
 CGridPoint.o: .././../api/IGridPoint.hpp

@@ -15,19 +15,17 @@ class CGridPoint
 public:
    CGridPoint(const CGridConfig& gridConfig,
               const Functor&     functor,
-              IGridPoint*&       pFuncMinGridPoint,
-              IGridPoint*&       pFuncMaxGridPoint)
+              IGridPoint*&       pFuncExtremaGridPoint)
    : mX(gridConfig.mX0)
    , mY(gridConfig.mY0)
    , mFuncVal(functor(mX, mY))
    , mpRightGridPoint(0)
    , mpLowerGridPoint(0)
    {
-      pFuncMinGridPoint = this;
-      pFuncMaxGridPoint = this;
+      pFuncExtremaGridPoint = this;
 
-      mpRightGridPoint = new CGridPoint(gridConfig, functor, pFuncMinGridPoint, pFuncMaxGridPoint, 1, 0, true);
-      mpLowerGridPoint = new CGridPoint(gridConfig, functor, pFuncMinGridPoint, pFuncMaxGridPoint, 0, 1, false);
+      mpRightGridPoint = new CGridPoint(gridConfig, functor, pFuncExtremaGridPoint, 1, 0, true);
+      mpLowerGridPoint = new CGridPoint(gridConfig, functor, pFuncExtremaGridPoint, 0, 1, false);
    }
 
 // IGridPoint
@@ -41,8 +39,7 @@ public:
 private:
    CGridPoint(const CGridConfig& gridConfig,
               const Functor&     functor,
-              IGridPoint*&       pFuncMinGridPoint,
-              IGridPoint*&       pFuncMaxGridPoint,
+              IGridPoint*&       pFuncExtremaGridPoint,
               const int          nX,
               const int          nY,
               const bool         doRight)
@@ -52,24 +49,23 @@ private:
    , mpRightGridPoint(0)
    , mpLowerGridPoint(0)
    {
-      if(mFuncVal < pFuncMinGridPoint->getFuncVal())
+      if(gridConfig.mExtremaType == CGridConfig::MINIMUM && mFuncVal < pFuncExtremaGridPoint->getFuncVal())
       {
-         pFuncMinGridPoint = this;
+         pFuncExtremaGridPoint = this;
       }
-
-      if(mFuncVal > pFuncMaxGridPoint->getFuncVal())
+      else if(gridConfig.mExtremaType == CGridConfig::MAXIMUM && mFuncVal > pFuncExtremaGridPoint->getFuncVal())
       {
-         pFuncMaxGridPoint = this;
+         pFuncExtremaGridPoint = this;
       }
 
       if(nX < gridConfig.mnxCells && doRight)
       {
-         mpRightGridPoint = new CGridPoint(gridConfig, functor, pFuncMinGridPoint, pFuncMaxGridPoint, nX + 1, nY, true);
+         mpRightGridPoint = new CGridPoint(gridConfig, functor, pFuncExtremaGridPoint, nX + 1, nY, true);
       }
 
       if(nY < gridConfig.mnyCells)
       {
-         mpLowerGridPoint = new CGridPoint(gridConfig, functor, pFuncMinGridPoint, pFuncMaxGridPoint, nX, nY + 1, false);
+         mpLowerGridPoint = new CGridPoint(gridConfig, functor, pFuncExtremaGridPoint, nX, nY + 1, false);
       }
    }
 

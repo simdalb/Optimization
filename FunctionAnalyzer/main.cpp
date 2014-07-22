@@ -13,17 +13,14 @@ int main()
 
    functionAnalyzer::gridOptimizer::IGridOptimizer& gridOptimizer = functionAnalyzer.getGridOptimizer();
 
-   gridOptimizer.addResolutions(4, 4);
-   gridOptimizer.addResolutions(5, 5);
    gridOptimizer.addResolutions(6, 6);
+   gridOptimizer.addResolutions(8, 8);
+   gridOptimizer.addResolutions(10, 10);
 
-   gridOptimizer.calculateExtrema();
+   gridOptimizer.calculateExtrema(functionAnalyzer::gridOptimizer::CGridConfig::MINIMUM);
 
-   const functionAnalyzer::gridOptimizer::IGridPoint* minGridPoint = gridOptimizer.getFuncMinGridPoint();
-   const functionAnalyzer::gridOptimizer::IGridPoint* maxGridPoint = gridOptimizer.getFuncMaxGridPoint();
+   const functionAnalyzer::gridOptimizer::IGridPoint* minGridPoint = gridOptimizer.getFuncExtremaGridPoint();
 
    std::cout << "Value of minimum: " << minGridPoint->getFuncVal() << ", location of minimum: ("
          << minGridPoint->getX() << ", " << minGridPoint->getY() << ")" << std::endl;
-   std::cout << "Value of maximum: " << maxGridPoint->getFuncVal() << ", location of maximum: ("
-         << maxGridPoint->getX() << ", " << maxGridPoint->getY() << ")" << std::endl;
 }

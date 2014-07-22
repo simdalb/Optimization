@@ -8,6 +8,13 @@ namespace gridOptimizer {
 class CGridConfig
 {
 public:
+   enum eExtremaType
+   {
+      MINIMUM = 0,
+      MAXIMUM
+   };
+
+   eExtremaType mExtremaType;
    double mX0;
    double mY0;
    double mXRange;

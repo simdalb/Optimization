@@ -44,6 +44,7 @@ main.o: functionAnalyzer/src/CFunctionAnalyzer.hpp
 main.o: functionAnalyzer/gridOptimizer/src/CGridOptimizer.hpp
 main.o: functionAnalyzer/gridOptimizer/api/IGridOptimizer.hpp
 main.o: functionAnalyzer/gridOptimizer/api/IGridPoint.hpp
+main.o: functionAnalyzer/gridOptimizer/src/CGridConfig.hpp
 main.o: functionAnalyzer/gridOptimizer/src/./CGridPoint.hpp
 main.o: functionAnalyzer/gridOptimizer/src/././CGridConfig.hpp
 main.o: functionAnalyzer/gridOptimizer/src/./../api/IGridPoint.hpp
