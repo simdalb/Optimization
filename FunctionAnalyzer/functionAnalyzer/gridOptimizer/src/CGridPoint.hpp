@@ -24,6 +24,7 @@ public:
    {
       pFuncExtremaGridPoint = this;
 
+      // create next neighbouring grid points
       mpRightGridPoint = new CGridPoint(gridConfig, functor, pFuncExtremaGridPoint, 1, 0, true);
       mpLowerGridPoint = new CGridPoint(gridConfig, functor, pFuncExtremaGridPoint, 0, 1, false);
    }
@@ -49,6 +50,7 @@ private:
    , mpRightGridPoint(0)
    , mpLowerGridPoint(0)
    {
+      // if current extrema candidate is invalidated by this point, overwrite it
       if(gridConfig.mExtremaType == CGridConfig::MINIMUM && mFuncVal < pFuncExtremaGridPoint->getFuncVal())
       {
          pFuncExtremaGridPoint = this;
@@ -58,6 +60,7 @@ private:
          pFuncExtremaGridPoint = this;
       }
 
+      // create next neighbouring points in grid
       if(nX < gridConfig.mnxCells && doRight)
       {
          mpRightGridPoint = new CGridPoint(gridConfig, functor, pFuncExtremaGridPoint, nX + 1, nY, true);

@@ -52,10 +52,13 @@ public:
       }
       CGridConfig gridConfig;
       gridConfig.mExtremaType = extremaType;
+      // lower left corner of grid
       gridConfig.mX0 = mFunctor.getMinX();
       gridConfig.mY0 = mFunctor.getMinY();
+      // size of grid
       gridConfig.mXRange = mFunctor.getMaxX() - mFunctor.getMinX();
       gridConfig.mYRange = mFunctor.getMaxY() - mFunctor.getMinY();
+      // set resolution of grid
       std::vector<int>::const_iterator itXResolutionList = mXResolutionList.begin();
       std::vector<int>::const_iterator itYResolutionList = mYResolutionList.begin();
       gridConfig.mnxCells = raise(2, *(itXResolutionList++));
@@ -64,12 +67,14 @@ public:
       {
          if(mpGridPoint)
          {
+            // Grid was previously created, replace with new smaller grid around approximate extrema
             gridConfig.mXRange = 2. * gridConfig.mXRange / double(gridConfig.mnxCells);
             gridConfig.mYRange = 2. * gridConfig.mYRange / double(gridConfig.mnyCells);
             gridConfig.mnxCells = raise(2, *(itXResolutionList++));
             gridConfig.mnyCells = raise(2, *(itYResolutionList++));
             gridConfig.mX0 = mpFuncExtremaGridPoint->getX() - 0.5 * gridConfig.mXRange;
             gridConfig.mY0 = mpFuncExtremaGridPoint->getY() - 0.5 * gridConfig.mYRange;
+            // Do not go outside the range specified by the functor definition
             if(gridConfig.mX0 < mFunctor.getMinX())
             {
                gridConfig.mX0 = mFunctor.getMinX();
@@ -86,8 +91,10 @@ public:
             {
                gridConfig.mYRange = mFunctor.getMaxY() - gridConfig.mY0;
             }
+            // previous grid not needed because we have all we need for new grid
             delete mpGridPoint;
          }
+         // create new grid and get extrema of this grid
          mpGridPoint = new CGridPoint<Functor>(gridConfig, mFunctor, mpFuncExtremaGridPoint);
       }
    }
